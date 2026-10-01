@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숙제상담소 - 마음 & 시간 케어 🌸</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti for Celebration Effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Google Fonts: Gaegu (Cute Korean Hand Font) & Noto Sans KR -->
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: '#FFEDF3',
+                        pastelPinkDark: '#FFB7D2',
+                        pastelYellow: '#FFFBE6',
+                        pastelYellowDark: '#FFE27D',
+                        pastelLavender: '#F3EEFF',
+                        pastelLavenderDark: '#C7B1FF',
+                        pastelMint: '#E6FAF3',
+                        pastelMintDark: '#99EAD0',
+                        pastelPeach: '#FFF0EA',
+                        cuteText: '#5A4B5C',
+                        cuteTextSub: '#8C7A8F',
+                        cuteAccent: '#FF7EA5'
+                    },
+                    fontFamily: {
+                        cute: ['Gaegu', 'cursive'],
+                        sans: ['Noto Sans KR', 'sans-serif']
+                    },
+                    boxShadow: {
+                        cute: '0 8px 25px -5px rgba(255, 183, 210, 0.4), 0 4px 10px -6px rgba(199, 177, 255, 0.3)',
+                        cuteInner: 'inset 0 2px 8px 0 rgba(255, 255, 255, 0.8)',
+                        cuteBtn: '0 6px 0px 0px #FFA8C5'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #FFEDF3 0%, #F3EEFF 50%, #E6FAF3 100%);
+            color: #5A4B5C;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-attachment: fixed;
+        }
+
+        .font-cute {
+            font-family: 'Gaegu', cursive;
+        }
+
+        /* Cute Bouncy & Floating Animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        @keyframes bounceGentle {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 183, 210, 0.6); }
+            50% { box-shadow: 0 0 28px rgba(255, 183, 210, 0.9); }
+        }
+
+        .animate-float {
+            animation: floatSlow 4s infinite ease-in-out;
+        }
+
+        .animate-bounce-cute {
+            animation: bounceGentle 2s infinite ease-in-out;
+        }
+
+        .animate-pulse-glow {
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        .chat-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: #FFF0EA;
+            border-radius: 9999px;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background-color: #FFB7D2;
+            border-radius: 9999px;
+            border: 2px solid #FFF0EA;
+        }
+
+        /* Bouncy Button Press Effect */
+        .btn-cute-press {
+            transition: all 0.1s ease;
+        }
+        .btn-cute-press:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0px 0px #FFA8C5 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-pink-200 selection:text-pink-800">
+
+    <header class="sticky top-0 z-40 bg-white/75 backdrop-blur-md border-b-4 border-pink-200 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Brand Logo & Cute Mascot -->
+            <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchTab('counseling')">
+                <div class="relative w-12 h-12 rounded-3xl bg-gradient-to-tr from-pink-300 to-amber-200 p-1 shadow-cute flex items-center justify-center animate-bounce-cute">
+                    <!-- Cute Cloud/Bear Mascot SVG Icon -->
+                    <svg class="w-9 h-9 text-white drop-shadow-sm" viewBox="0 0 64 64" fill="currentColor">
+                        <path d="M50,28 C50,22.4 45.5,18 40,18 C39.1,18 38.2,18.1 37.4,18.4 C35.2,13.4 30.2,10 24.5,10 C16.5,10 10,16.5 10,24.5 C10,25.4 10.1,26.3 10.3,27.1 C6.6,28.8 4,32.6 4,37 C4,43.1 8.9,48 15,48 L49,48 C55.1,48 60,43.1 60,37 C60,32.2 56.9,28.2 52.6,26.7 C51.3,27.5 50.7,27.8 50,28 Z" fill="#FFF0EA" stroke="#FFB7D2" stroke-width="3"/>
+                        <!-- Pink Cheeks -->
+                        <circle cx="20" cy="35" r="3.5" fill="#FF7EA5" opacity="0.6"/>
+                        <circle cx="44" cy="35" r="3.5" fill="#FF7EA5" opacity="0.6"/>
+                        <!-- Eyes & Smile -->
+                        <circle cx="23" cy="30" r="2.5" fill="#5A4B5C"/>
+                        <circle cx="41" cy="30" r="2.5" fill="#5A4B5C"/>
+                        <path d="M 28 34 Q 32 38 36 34" stroke="#5A4B5C" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="font-cute text-2xl font-bold text-cuteText tracking-wide flex items-center gap-1.5">
+                        숙제상담소 <span class="text-xs px-2 py-0.5 rounded-full bg-pink-100 text-pink-600 font-sans border border-pink-200">마음 & 시간</span>
+                    </h1>
+                    <p class="text-xs text-cuteTextSub font-medium">포근이와 함께면 숙제도 거뜬해! ✨</p>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="flex space-x-1 bg-pink-100/70 p-1.5 rounded-3xl border-2 border-pink-200/80">
+                <button id="tab-btn-counseling" onclick="switchTab('counseling')" class="px-4 py-2 rounded-2xl text-sm font-bold font-cute transition-all duration-200 bg-white shadow-sm text-pink-600 border border-pink-200 flex items-center">
+                    <span class="mr-1.5 text-base">🧸</span> 마음 상담소
+                </button>
+                <button id="tab-btn-scheduler" onclick="switchTab('scheduler')" class="px-4 py-2 rounded-2xl text-sm font-bold font-cute transition-all duration-200 text-cuteText hover:text-pink-600 flex items-center">
+                    <span class="mr-1.5 text-base">⏰</span> 시간 분배기
+                </button>
+                <button id="tab-btn-prompt" onclick="switchTab('prompt')" class="px-4 py-2 rounded-2xl text-sm font-bold font-cute transition-all duration-200 text-cuteText hover:text-pink-600 flex items-center">
+                    <span class="mr-1.5 text-base">📜</span> 프롬프트 레시피
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-6 w-full flex-grow space-y-6">
+
+        <!-- Cute Mascot Hero Encouragement Banner -->
+        <div class="bg-gradient-to-r from-pink-200/80 via-purple-100/80 to-amber-100/80 p-5 rounded-3xl border-3 border-white shadow-cute flex items-center justify-between relative overflow-hidden">
+            <div class="space-y-1 z-10 max-w-xl">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-white/80 text-pink-600 border border-pink-200">
+                    <i class="fa-solid fa-sparkles text-amber-400"></i> 포근이의 오늘의 따뜻한 한마디
+                </span>
+                <h2 id="hero-quote" class="text-2xl font-bold font-cute text-cuteText leading-tight pt-1">
+                    "숙제가 너무 많아 막막할 땐, 제일 작은 것부터 딱 하나만 시작해 봐요! 🌸"
+                </h2>
+                <p class="text-xs text-cuteTextSub">포근이가 항상 곁에서 응원하고 있어요. 토닥토닥~</p>
+            </div>
+            
+            <!-- Animated SVG Mascot Character -->
+            <div class="hidden sm:flex items-center justify-center z-10 w-24 h-24 animate-float">
+                <svg class="w-20 h-20 drop-shadow-md" viewBox="0 0 100 100">
+                    <!-- Soft Bear Body -->
+                    <circle cx="50" cy="55" r="32" fill="#FFE27D"/>
+                    <!-- Ears -->
+                    <circle cx="28" cy="30" r="12" fill="#FFE27D"/>
+                    <circle cx="28" cy="30" r="7" fill="#FFB7D2"/>
+                    <circle cx="72" cy="30" r="12" fill="#FFE27D"/>
+                    <circle cx="72" cy="30" r="7" fill="#FFB7D2"/>
+                    <!-- Eyes -->
+                    <circle cx="40" cy="50" r="4" fill="#5A4B5C"/>
+                    <circle cx="60" cy="50" r="4" fill="#5A4B5C"/>
+                    <circle cx="41.5" cy="48.5" r="1.5" fill="#FFFFFF"/>
+                    <circle cx="61.5" cy="48.5" r="1.5" fill="#FFFFFF"/>
+                    <!-- Snout & Nose -->
+                    <ellipse cx="50" cy="58" rx="10" ry="7" fill="#FFFFFF"/>
+                    <polygon points="50,54 46,58 54,58" fill="#FF7EA5"/>
+                    <path d="M 47 60 Q 50 63 53 60" stroke="#5A4B5C" stroke-width="2" stroke-linecap="round" fill="none"/>
+                    <!-- Cheeks -->
+                    <circle cx="34" cy="56" r="5" fill="#FF7EA5" opacity="0.6"/>
+                    <circle cx="66" cy="56" r="5" fill="#FF7EA5" opacity="0.6"/>
+                </svg>
+            </div>
+
+            <!-- Decorative background elements -->
+            <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-pink-300/30 rounded-full blur-xl"></div>
+            <div class="absolute top-2 left-1/2 w-20 h-20 bg-purple-300/30 rounded-full blur-lg"></div>
+        </div>
+
+        <section id="section-counseling" class="space-y-4">
+            
+            <!-- Cute Quick Emotion Buttons -->
+            <div class="flex flex-wrap gap-2 items-center bg-white/60 backdrop-blur-xs p-3 rounded-2xl border border-pink-200">
+                <span class="text-xs font-bold font-cute text-pink-600 text-sm mr-1"><i class="fa-solid fa-heart mr-1"></i> 포근이에게 감정 전하기:</span>
+                <button onclick="sendQuickPrompt('숙제가 너무 많아서 너무 답답하고 눈물나요 😭')" class="px-3 py-1.5 bg-pink-100 hover:bg-pink-200 text-pink-800 rounded-2xl text-xs font-medium border border-pink-300 transition-all btn-cute-press">
+                    😭 숙제가 너무 많아서 답답해요
+                </button>
+                <button onclick="sendQuickPrompt('오늘따라 도저히 집중이 안 되고 놀고 싶어요 🥺')" class="px-3 py-1.5 bg-purple-100 hover:bg-purple-200 text-purple-800 rounded-2xl text-xs font-medium border border-purple-300 transition-all btn-cute-press">
+                    🥺 오늘따라 집중이 안 돼요
+                </button>
+                <button onclick="sendQuickPrompt('쉬고 싶은데 마감 때문에 불안해서 못 쉬겠어요 🛌')" class="px-3 py-1.5 bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-2xl text-xs font-medium border border-amber-300 transition-all btn-cute-press">
+                    🛌 쉬고 싶은데 마음이 불안해요
+                </button>
+                <button onclick="sendQuickPrompt('어디서부터 시작해야 할지 손도 못 대겠어요 🌪️')" class="px-3 py-1.5 bg-teal-100 hover:bg-teal-200 text-teal-900 rounded-2xl text-xs font-medium border border-teal-300 transition-all btn-cute-press">
+                    🌪️ 막상 손대려니 막막해요
+                </button>
+            </div>
+
+            <!-- Cute Interactive Chat Box Container -->
+            <div class="bg-white/90 rounded-3xl border-4 border-pink-200 shadow-cute flex flex-col h-[520px] overflow-hidden relative">
+                
+                <!-- Chat Window Top Header -->
+                <div class="bg-pink-100/80 border-b-2 border-pink-200 px-6 py-3.5 flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="relative">
+                            <div class="w-10 h-10 rounded-full bg-amber-200 border-2 border-white flex items-center justify-center text-lg shadow-sm">🧸</div>
+                            <span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full"></span>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-base text-cuteText font-cute">포근이 (마음상담 AI)</h3>
+                            <p class="text-xs text-pink-600 font-medium">따뜻하게 귀 기울이는 중... 🌸</p>
+                        </div>
+                    </div>
+                    <button onclick="clearChat()" class="text-xs text-cuteTextSub hover:text-pink-600 px-3 py-1.5 rounded-xl bg-white/80 hover:bg-white border border-pink-200 transition-all">
+                        <i class="fa-solid fa-rotate-right mr-1"></i>대화 지우기
+                    </button>
+                </div>
+
+                <!-- Chat History Scroll View -->
+                <div id="chat-messages" class="flex-grow p-6 overflow-y-auto space-y-4 chat-scroll bg-gradient-to-b from-pink-50/30 to-purple-50/20">
+                    <!-- Default Mascot Message -->
+                    <div class="flex items-start space-x-3">
+                        <div class="w-9 h-9 rounded-full bg-amber-200 border-2 border-white flex items-center justify-center text-base flex-shrink-0 shadow-xs">🧸</div>
+                        <div class="max-w-[82%] bg-white border-2 border-pink-200 p-4 rounded-3xl rounded-tl-none shadow-xs text-sm text-cuteText leading-relaxed">
+                            <p class="font-bold font-cute text-pink-600 text-base mb-1">안녕! 나는 너의 마음을 들어줄 포근이야! ☁️</p>
+                            오늘 숙제 때문에 마음이 많이 무겁고 답답했지? 속상한 마음 다 이해해.<br>
+                            어떤 숙제가 너를 괴롭히고 있는지, 마음속 이야기를 편하게 털어놔 줘! 듣고 바로 따뜻하게 안아줄게 💖
+                            <span class="block text-[10px] text-cuteTextSub mt-2.5 text-right font-mono">방금 전</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mascot Typing Indicator -->
+                <div id="typing-indicator" class="hidden px-6 py-2 bg-pink-50/80 border-t border-pink-100 flex items-center space-x-2 text-pink-600 text-xs font-medium">
+                    <div class="w-5 h-5 rounded-full bg-amber-200 flex items-center justify-center text-xs animate-spin">🧸</div>
+                    <span class="font-cute text-sm">포근이가 따뜻한 답장을 고르는 중이에요... 💭</span>
+                </div>
+
+                <!-- Chat Input Controls -->
+                <form id="chat-form" onsubmit="handleChatSubmit(event)" class="p-3 bg-white border-t-2 border-pink-200 flex items-center space-x-2">
+                    <input type="text" id="chat-input" placeholder="포근이에게 솔직한 마음이나 고민을 말해보세요..." class="flex-grow px-4 py-3 rounded-2xl bg-pink-50/50 border-2 border-pink-200 text-sm text-cuteText placeholder-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-300 focus:bg-white transition-all">
+                    <button type="submit" class="px-6 py-3 bg-pink-400 hover:bg-pink-500 text-white font-bold font-cute text-lg rounded-2xl transition-all shadow-cuteBtn btn-cute-press flex items-center">
+                        <span>전송</span>
+                        <i class="fa-solid fa-paper-plane ml-2 text-xs"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section id="section-scheduler" class="hidden space-y-6">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Homework Split Input Form Card -->
+                <div class="lg:col-span-5 bg-white/90 p-6 rounded-3xl border-4 border-purple-200 shadow-cute space-y-4">
+                    <div class="flex items-center space-x-2 border-b-2 border-purple-100 pb-3">
+                        <span class="text-2xl">📝</span>
+                        <h3 class="font-bold font-cute text-2xl text-cuteText">숙제 분배 신청서</h3>
+                    </div>
+
+                    <form id="scheduler-form" onsubmit="generateSchedule(event)" class="space-y-3.5">
+                        <div>
+                            <label class="block text-xs font-bold text-cuteText mb-1"><i class="fa-solid fa-book text-purple-400 mr-1"></i>숙제 과목 / 이름</label>
+                            <input type="text" id="hw-title" placeholder="예: 수학 단원평가, 영어 지문 읽기" required class="w-full px-3.5 py-2.5 rounded-2xl bg-purple-50/50 border-2 border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-cuteText mb-1"><i class="fa-solid fa-list-ol text-purple-400 mr-1"></i>전체 양</label>
+                                <input type="number" id="hw-amount" min="1" placeholder="30" required class="w-full px-3.5 py-2.5 rounded-2xl bg-purple-50/50 border-2 border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-cuteText mb-1"><i class="fa-solid fa-tag text-purple-400 mr-1"></i>단위</label>
+                                <select id="hw-unit" class="w-full px-3.5 py-2.5 rounded-2xl bg-purple-50/50 border-2 border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300">
+                                    <option value="페이지">페이지 (p)</option>
+                                    <option value="문제">문제 (개)</option>
+                                    <option value="지문">지문 (개)</option>
+                                    <option value="단어">단어 (개)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-cuteText mb-1"><i class="fa-solid fa-calendar-day text-purple-400 mr-1"></i>남은 기간 (일)</label>
+                                <input type="number" id="hw-days" min="1" max="30" value="1" required class="w-full px-3.5 py-2.5 rounded-2xl bg-purple-50/50 border-2 border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-cuteText mb-1"><i class="fa-solid fa-gauge-high text-purple-400 mr-1"></i>체감 난이도</label>
+                                <select id="hw-difficulty" class="w-full px-3.5 py-2.5 rounded-2xl bg-purple-50/50 border-2 border-purple-200 text-sm focus:outline-none focus:ring-2 focus:ring-purple-300">
+                                    <option value="easy">쉬움 (개당 2분)</option>
+                                    <option value="medium" selected>보통 (개당 4분)</option>
+                                    <option value="hard">어려움 (개당 7분)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-cuteText mb-1"><i class="fa-solid fa-hourglass-half text-purple-400 mr-1"></i>집중 세션 선택</label>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <label class="flex items-center p-2.5 border-2 border-purple-200 rounded-2xl cursor-pointer hover:bg-purple-50">
+                                    <input type="radio" name="pomo-type" value="25" checked class="text-purple-500 focus:ring-purple-300">
+                                    <span class="ml-2 font-medium text-cuteText">25분 집중 + 5분 휴식</span>
+                                </label>
+                                <label class="flex items-center p-2.5 border-2 border-purple-200 rounded-2xl cursor-pointer hover:bg-purple-50">
+                                    <input type="radio" name="pomo-type" value="50" class="text-purple-500 focus:ring-purple-300">
+                                    <span class="ml-2 font-medium text-cuteText">50분 집중 + 10분 휴식</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-purple-400 hover:bg-purple-500 text-white font-bold font-cute text-xl rounded-2xl transition-all shadow-cuteBtn border-2 border-purple-300 btn-cute-press flex items-center justify-center">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-2"></i>예쁘게 시간 나누기
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Schedule Checklist & Interactive Pomodoro Timer -->
+                <div class="lg:col-span-7 space-y-4">
+                    
+                    <!-- Cute Built-in Pomodoro Timer Widget -->
+                    <div class="bg-gradient-to-r from-amber-100 to-pink-100 p-5 rounded-3xl border-4 border-amber-200 shadow-cute flex items-center justify-between">
+                        <div class="space-y-1">
+                            <span class="px-2.5 py-0.5 bg-white/80 rounded-full text-xs font-bold text-amber-800 border border-amber-200">
+                                <i class="fa-solid fa-stopwatch mr-1"></i>뽀모도로 타이머
+                            </span>
+                            <div id="pomo-timer-display" class="text-4xl font-mono font-bold text-cuteText">25:00</div>
+                            <p id="pomo-status-text" class="text-xs text-cuteTextSub">지금은 집중 시간이에요! 파이팅 ✨</p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <button id="pomo-start-btn" onclick="togglePomodoroTimer()" class="px-5 py-2.5 bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold font-cute text-lg rounded-2xl shadow-sm border border-amber-300 transition-all btn-cute-press">
+                                <i class="fa-solid fa-play mr-1"></i>시작
+                            </button>
+                            <button onclick="resetPomodoroTimer()" class="px-5 py-1.5 bg-white hover:bg-amber-50 text-slate-600 text-xs font-bold rounded-xl border border-amber-200 transition-all">
+                                리셋
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Task Plan Display Card -->
+                    <div class="bg-white/90 p-6 rounded-3xl border-4 border-pink-200 shadow-cute">
+                        <div class="flex items-center justify-between mb-3 border-b-2 border-pink-100 pb-3">
+                            <h3 class="font-bold font-cute text-2xl text-cuteText flex items-center">
+                                <span class="mr-2 text-xl">✨</span>오늘의 소분 숙제 체크리스트
+                            </h3>
+                            <span id="plan-status-badge" class="px-3 py-1 bg-pink-100 text-pink-700 text-xs font-bold rounded-full border border-pink-200">입력 대기 중</span>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="mb-4 bg-pink-50 p-3.5 rounded-2xl border-2 border-pink-100">
+                            <div class="flex justify-between items-center text-xs font-bold text-cuteText mb-1.5">
+                                <span>달성률</span>
+                                <span id="progress-text">0% 완료</span>
+                            </div>
+                            <div class="w-full bg-pink-100 rounded-full h-4 overflow-hidden border border-pink-200">
+                                <div id="progress-bar" class="bg-gradient-to-r from-pink-400 via-purple-400 to-mintCalm h-4 rounded-full transition-all duration-500 w-0"></div>
+                            </div>
+                        </div>
+
+                        <!-- Generated Micro Tasks List Container -->
+                        <div id="schedule-list" class="space-y-2.5 max-h-[260px] overflow-y-auto pr-1 chat-scroll">
+                            <div class="text-center py-10 text-cuteTextSub space-y-2 font-cute text-lg">
+                                <p>🌸 왼쪽 폼에 숙제 양을 입력하면<br>포근이가 딱 하기 좋은 크기로 쪼개줄게요!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="section-prompt" class="hidden space-y-6">
+            <!-- Title Card -->
+            <div class="bg-white/90 p-6 rounded-3xl border-4 border-indigo-200 shadow-cute space-y-3">
+                <div class="flex items-center justify-between border-b-2 border-indigo-100 pb-3">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">📜</span>
+                        <h3 class="font-bold font-cute text-2xl text-cuteText">제미나이(Gemini) 맞춤형 프롬프트 레시피</h3>
+                    </div>
+                    <button onclick="copyPromptCode()" class="px-4 py-2 bg-indigo-400 hover:bg-indigo-500 text-white font-bold font-cute text-lg rounded-2xl shadow-cuteBtn border border-indigo-300 transition-all btn-cute-press">
+                        <i class="fa-regular fa-copy mr-1"></i>프롬프트 복사하기
+                    </button>
+                </div>
+                <p class="text-xs text-cuteTextSub leading-relaxed">
+                    본 웹사이트를 직접 제미나이(Gemini) API와 연동하거나, 제미나이 AI 대화창에 직접 붙여넣어 완벽한 숙제 상담사를 만들 수 있는 프롬프트입니다.
+                </p>
+
+                <!-- System Prompt Showcase Box -->
+                <div class="bg-slate-900 text-slate-100 p-5 rounded-2xl shadow-inner font-mono text-xs overflow-x-auto border-2 border-indigo-300 leading-relaxed">
+<pre id="prompt-text-block" class="whitespace-pre-wrap">
+[System Role Definition: 숙제상담소 '포근이' 페르소나]
+
+당신은 숙제 양에 압도되어 스트레스를 받는 초·중·고등학생을 상대로 다정하고 따뜻하게 상담해 주는 AI 심리 코치이자 시간 분배 가이드 '포근이'입니다.
+
+1. 페르소나 & 어조:
+   - 말투: 엄청나게 귀엽고 따뜻하며 다정한 존댓말 사용 ("~했구나!", "~해보자!", "토닥토닥 🌸").
+   - 이모지 사용: 🧸, 🌸, ☕, ☁️, ✨ 등 파스텔 감성의 이모지를 매 문장마다 풍부하게 배치.
+   - 절대 학생을 비난하거나 "왜 미뤘니?"라고 꾸짖지 않음. 100% 공감과 심리적 안정감을 우선 제공.
+
+2. 상담 알고리즘:
+   - Step 1 (감정 공감): 숙제가 많아 답답한 학생의 심정에 깊게 공감하고 토닥여주기.
+   - Step 2 (아주 작은 시작 유도): "숙제 전체를 다 끝내자"가 아니라 "우선 연필을 쥐고 딱 5분만 책상에 앉아볼까?"처럼 극단적으로 작게 쪼갠 첫 단계 제안.
+   - Step 3 (시간 계산 및 뽀모도로 분할): 숙제 수량과 남은 시간을 들으면 25분 공부 + 5분 휴식 세션으로 잘라 체크리스트 형태로 출력하기.
+</pre>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white/60 backdrop-blur-xs border-t-2 border-pink-100 py-4 text-center text-xs font-medium text-cuteTextSub">
+        <p>ⓒ 2026 숙제상담소 (Homework Counseling Center) 🌸 | 세상에서 가장 포근한 숙제 파트너</p>
+    </footer>
+
+    <script>
+        // Tab Navigation Logic
+        function switchTab(tabName) {
+            const tabs = ['counseling', 'scheduler', 'prompt'];
+            tabs.forEach(tab => {
+                const sec = document.getElementById(`section-${tab}`);
+                const btn = document.getElementById(`tab-btn-${tab}`);
+                if (tab === tabName) {
+                    sec.classList.remove('hidden');
+                    btn.classList.add('bg-white', 'shadow-sm', 'text-pink-600', 'border', 'border-pink-200');
+                    btn.classList.remove('text-cuteText');
+                } else {
+                    sec.classList.add('hidden');
+                    btn.classList.remove('bg-white', 'shadow-sm', 'text-pink-600', 'border', 'border-pink-200');
+                    btn.classList.add('text-cuteText');
+                }
+            });
+        }
+
+        // --- SECTION 1: AI Heart Counselor Chat Logic ---
+        const cuteAiReplies = [
+            "숙제가 산더미 같아서 마음이 울적했구나... 🥺 그 마음 포근이가 다 안아줄게! 제일 부피가 작은 과목 하나만 같이 골라볼까?",
+            "시작하기 전이 원래 제일 무섭고 피곤한 법이야! ✨ 딱 10분만 노래 들으면서 가볍게 연필 쥐어보는 건 어떨까?",
+            "완벽하게 하지 않아도 정말 괜찮아! 🌸 70점짜리 완성도라도 시작해 본 네 자신이 진짜 멋진 거니까!",
+            "잠깐 기지개 크게 켜고 시원한 물 한 잔 마시고 오자! ☕ 포근이는 여기서 따뜻하게 기다리고 있을게!",
+            "지금 너무 잘하고 있어! 마음을 털어놓아 줘서 고마워 🧸 시간 분배 탭으로 가서 숙제를 쪼개보는 것도 추천해!"
+        ];
+
+        function handleChatSubmit(event) {
+            event.preventDefault();
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addChatMessage('user', message);
+            input.value = '';
+
+            const typing = document.getElementById('typing-indicator');
+            typing.classList.remove('hidden');
+
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            setTimeout(() => {
+                typing.classList.add('hidden');
+                const randomReply = cuteAiReplies[Math.floor(Math.random() * cuteAiReplies.length)];
+                addChatMessage('ai', randomReply);
+            }, 800 + Math.random() * 600);
+        }
+
+        function sendQuickPrompt(promptText) {
+            document.getElementById('chat-input').value = promptText;
+            handleChatSubmit(new Event('submit'));
+        }
+
+        function addChatMessage(sender, text) {
+            const chatMessages = document.getElementById('chat-messages');
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `flex items-start space-x-3 ${sender === 'user' ? 'justify-end' : ''}`;
+
+            if (sender === 'ai') {
+                msgDiv.innerHTML = `
+                    <div class="w-9 h-9 rounded-full bg-amber-200 border-2 border-white flex items-center justify-center text-base flex-shrink-0 shadow-xs">🧸</div>
+                    <div class="max-w-[82%] bg-white border-2 border-pink-200 p-4 rounded-3xl rounded-tl-none shadow-xs text-sm text-cuteText leading-relaxed">
+                        ${text}
+                        <span class="block text-[10px] text-cuteTextSub mt-2 text-right font-mono">${timeStr}</span>
+                    </div>
+                `;
+            } else {
+                msgDiv.innerHTML = `
+                    <div class="max-w-[82%] bg-pink-400 text-white p-4 rounded-3xl rounded-tr-none shadow-xs text-sm leading-relaxed border-2 border-pink-300">
+                        ${text}
+                        <span class="block text-[10px] text-pink-100 mt-2 text-right font-mono">${timeStr}</span>
+                    </div>
+                    <div class="w-9 h-9 rounded-full bg-purple-200 border-2 border-white flex items-center justify-center text-xs text-purple-800 font-bold flex-shrink-0">나</div>
+                `;
+            }
+
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function clearChat() {
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-amber-200 border-2 border-white flex items-center justify-center text-base flex-shrink-0 shadow-xs">🧸</div>
+                    <div class="max-w-[82%] bg-white border-2 border-pink-200 p-4 rounded-3xl rounded-tl-none shadow-xs text-sm text-cuteText leading-relaxed">
+                        대화가 새롭게 시작되었어요! 마음속 이야기 언제든 편하게 말해줘요 🌸
+                        <span class="block text-[10px] text-cuteTextSub mt-2 text-right font-mono">방금 전</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- SECTION 2: Homework Scheduler & Pomodoro Timer Logic ---
+        let totalSessionsCount = 0;
+        let completedSessionsCount = 0;
+
+        function generateSchedule(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('hw-title').value;
+            const amount = parseInt(document.getElementById('hw-amount').value);
+            const unit = document.getElementById('hw-unit').value;
+            const days = parseInt(document.getElementById('hw-days').value);
+            const difficulty = document.getElementById('hw-difficulty').value;
+            const pomoType = parseInt(document.querySelector('input[name="pomo-type"]:checked').value);
+
+            let minsPerUnit = 4;
+            if (difficulty === 'easy') minsPerUnit = 2;
+            if (difficulty === 'hard') minsPerUnit = 7;
+
+            const totalMinsNeeded = amount * minsPerUnit;
+            const sessionsNeeded = Math.ceil(totalMinsNeeded / pomoType);
+            const itemsPerSession = Math.max(1, Math.round(amount / sessionsNeeded));
+
+            const listContainer = document.getElementById('schedule-list');
+            listContainer.innerHTML = '';
+
+            totalSessionsCount = sessionsNeeded;
+            completedSessionsCount = 0;
+
+            let remainingAmount = amount;
+
+            for (let i = 1; i <= sessionsNeeded; i++) {
+                const currentBatch = (i === sessionsNeeded) ? remainingAmount : Math.min(itemsPerSession, remainingAmount);
+                remainingAmount -= currentBatch;
+                const dayAssigned = Math.min(days, Math.ceil((i / sessionsNeeded) * days));
+
+                const itemDiv = document.createElement('div');
+                itemDiv.className = "flex items-center justify-between p-3.5 bg-pink-50/60 border-2 border-pink-200 rounded-2xl hover:bg-pink-100/50 transition-all";
+                itemDiv.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <input type="checkbox" onchange="toggleTask(this)" class="w-5 h-5 text-pink-500 rounded-lg focus:ring-pink-300 border-pink-300 cursor-pointer">
+                        <div>
+                            <span class="text-xs font-bold px-2 py-0.5 rounded-full bg-pink-200 text-pink-800 mr-1.5">${dayAssigned}일차</span>
+                            <span class="text-sm font-bold text-cuteText">${title} 세션 ${i}</span>
+                            <p class="text-xs text-cuteTextSub mt-0.5">목표: ${currentBatch}${unit} 하기 (${pomoType}분 집중)</p>
+                        </div>
+                    </div>
+                    <span class="text-xs font-bold font-mono text-pink-500 bg-white px-2.5 py-1 rounded-xl border border-pink-200">⏱️ ${pomoType}m</span>
+                `;
+                listContainer.appendChild(itemDiv);
+            }
+
+            document.getElementById('plan-status-badge').className = "px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full border border-purple-200";
+            document.getElementById('plan-status-badge').innerText = `총 ${sessionsNeeded}개 세션 분할 완료 ✨`;
+
+            updateProgressBar();
+        }
+
+        function toggleTask(checkbox) {
+            const parent = checkbox.closest('div');
+            if (checkbox.checked) {
+                completedSessionsCount++;
+                parent.classList.add('opacity-40', 'line-through');
+            } else {
+                completedSessionsCount--;
+                parent.classList.remove('opacity-40', 'line-through');
+            }
+            updateProgressBar();
+        }
+
+        function updateProgressBar() {
+            if (totalSessionsCount === 0) return;
+            const percentage = Math.round((completedSessionsCount / totalSessionsCount) * 100);
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').innerText = `${percentage}% 완료 (${completedSessionsCount}/${totalSessionsCount})`;
+
+            // Trigger Confetti Celebrations on 100% completion
+            if (percentage === 100 && typeof confetti === 'function') {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        // --- Pomodoro Timer Functionality ---
+        let timerInterval = null;
+        let timerTimeLeft = 25 * 60;
+        let isTimerRunning = false;
+
+        function togglePomodoroTimer() {
+            const btn = document.getElementById('pomo-start-btn');
+            if (isTimerRunning) {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                btn.innerHTML = `<i class="fa-solid fa-play mr-1"></i>시작`;
+                document.getElementById('pomo-status-text').innerText = "잠시 일시정지 되었어요!";
+            } else {
+                isTimerRunning = true;
+                btn.innerHTML = `<i class="fa-solid fa-pause mr-1"></i>정지`;
+                document.getElementById('pomo-status-text').innerText = "집중 세션 진행 중... 화이팅! 🔥";
+
+                timerInterval = setInterval(() => {
+                    if (timerTimeLeft > 0) {
+                        timerTimeLeft--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        isTimerRunning = false;
+                        btn.innerHTML = `<i class="fa-solid fa-play mr-1"></i>시작`;
+                        document.getElementById('pomo-status-text').innerText = "🎉 뽀모도로 세션 완료! 5분 휴식을 취하세요!";
+                        if (typeof confetti === 'function') confetti({ particleCount: 50 });
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetPomodoroTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            timerTimeLeft = 25 * 60;
+            updateTimerDisplay();
+            document.getElementById('pomo-start-btn').innerHTML = `<i class="fa-solid fa-play mr-1"></i>시작`;
+            document.getElementById('pomo-status-text').innerText = "지금은 집중 시간이에요! 파이팅 ✨";
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerTimeLeft / 60);
+            const secs = timerTimeLeft % 60;
+            document.getElementById('pomo-timer-display').innerText = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        // --- Clipboard Copy Helper ---
+        function copyPromptCode() {
+            const codeText = document.getElementById('prompt-text-block').innerText;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = codeText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            alert('🌸 포근이 프롬프트 레시피가 성공적으로 복사되었습니다!');
+        }
+    </script>
+</body>
+</html>
